@@ -147,7 +147,7 @@ public:
         cout<<pret;
     }
 
-    void set_pret(double cost) override  ///doar in clasa se poate defini
+   void set_pret(double cost) override  ///doar in clasa se poate defini
     {
 
         if(tip_ciorba == "legume")
@@ -192,7 +192,7 @@ public:
         cout<<pret;
     }
 
-   void set_pret(double cost) override  ///doar in clasa se poate defini
+     void set_pret(double cost) override  ///doar in clasa se poate defini
     {
 
         if(carne == "pui"  && tip_fel == "tocana")
@@ -258,14 +258,14 @@ public:
 
 };
 
-class Vin_varsat:public Meniu
+class Vin_varsat:virtual public Meniu
 {
 private:
     string culoare;
     double cantitate;///in ml;
 
 public:
-     Vin_varsat(double pret = 25, string culoare = "rosu", double cantitate = 100):Meniu(pret),culoare(culoare),cantitate(cantitate)
+    Vin_varsat(double pret = 25, string culoare = "rosu", double cantitate = 100):Meniu(pret),culoare(culoare),cantitate(cantitate)
     {
 
     }
@@ -277,7 +277,7 @@ public:
         cout<<pret;
     }
 
-   void set_pret(double cost) override  ///doar in clasa se poate defini
+    virtual void set_pret(double cost) override  ///doar in clasa se poate defini
     {
 
         if(culoare == "rosu")
@@ -300,7 +300,7 @@ public:
 
 };
 
-class Vin_la_sticla:public Meniu
+class Vin_la_sticla:virtual public Meniu
 {
 
 private:
@@ -308,7 +308,7 @@ private:
     int an;
 
 public:
-     Vin_la_sticla(double pret = 25, string denumire = "Castel Bolovanu", int an = 2004):Meniu(pret),denumire(denumire),an(an)
+    Vin_la_sticla(double pret = 25, string denumire = "Castel Bolovanu", int an = 2004):Meniu(pret),denumire(denumire),an(an)
     {
 
     }
@@ -320,7 +320,7 @@ public:
         cout<<pret;
     }
 
-   void set_pret(double cost) override  ///doar in clasa se poate defini
+    virtual void set_pret(double cost) override  ///doar in clasa se poate defini
     {
 
         if(denumire == "Bordeux")
@@ -343,8 +343,109 @@ public:
 
 };
 
-class Bere_la_sticla:public Meniu
+class Bere_la_sticla: virtual public Meniu
 {
+private:
+    string denumire;
+    bool alcool;
+
+public:
+    Bere_la_sticla(double pret = 15, string denumire = "Ursus", bool alcool = true):Meniu(pret),denumire(denumire),alcool(alcool)
+    {
+
+    }
+
+    Bere_la_sticla(const Bere_la_sticla&);
+    ~Bere_la_sticla();
+    void afiseara_pret() override ///nu mai e clasa abstracta
+    {
+        cout<<pret;
+    }
+
+   virtual void set_pret(double cost) override  ///doar in clasa se poate defini
+    {
+
+        if(denumire == "Bergenbir")
+            cost = cost + 3;
+        else if(denumire == "Tuborg")
+            cost = cost + 5;
+        else if(denumire == "Heineken")
+            cost += 7;
+
+        Meniu::set_pret(cost);
+    }
+
+    double get_pret();
+    string get_tip_bere_la_sticla();
+    void set_tip_bere_la_sticla(string, bool);
+    Bere_la_sticla operator=(const Bere_la_sticla &);
+    friend ostream& operator<< (ostream &out, Bere_la_sticla &bere);
+    friend istream& operator>> (istream &in, Bere_la_sticla &bere);
+
+};
+
+class Apa:virtual public Meniu
+{
+private:
+    string denumire;
+
+public:
+    Apa(double pret = 25, string denumire = "Dorna"):Meniu(pret),denumire(denumire)
+    {
+
+    }
+
+    Apa(const Apa&);
+    ~Apa();
+    void afiseara_pret() override ///nu mai e clasa abstracta
+    {
+        cout<<pret;
+    }
+
+    virtual void set_pret(double cost) override  ///doar in clasa se poate defini
+    {
+
+        if(denumire == "Acua Carpatica")
+            cost = cost + 2;
+        else
+            cost = cost + 1;
+
+        Meniu::set_pret(cost);
+    }
+
+    double get_pret();
+    string get_tip_apa();
+    void set_tip_apa(string);
+    Apa operator=(const Apa &);
+    friend ostream& operator<< (ostream &out, Apa &apa);
+    friend istream& operator>> (istream &in, Apa &apa);
+
+};
+
+class Bauturi: public Vin_varsat, public Vin_la_sticla, public Bere_la_sticla, public Apa
+{
+private:
+    double pret_mediu;
+
+public:
+    void set_pret(double cost){pret_mediu = cost;}
+     Bauturi(double pret = 5):pret_mediu(pret)
+    {
+
+    }
+
+   Bauturi(const Bauturi&);
+    ~Bauturi();
+    void afiseara_pret() override ///nu mai e clasa abstracta
+    {
+        cout<<pret;
+    }
+
+    void calculeaza_pret_mediu();
+    Bauturi operator=(const Bauturi&);
+    friend ostream& operator<< (ostream &out, Bauturi &);
+    friend istream& operator>> (istream &in, Bauturi &);
+
 
 };
 
@@ -839,7 +940,7 @@ Garnitura::~Garnitura()
 
 void Garnitura::set_tip_garnitura(string leguma, string nume)
 {
-   leguma_principala = leguma;
+    leguma_principala = leguma;
     tip_garnitura = nume;
 
 }
@@ -859,9 +960,9 @@ Garnitura Garnitura::operator=(const Garnitura &ob)
     if(this!=&ob)
     {
 
-       this->Fel_principal::operator=(ob);
-       leguma_principala = ob.leguma_principala;
-       tip_garnitura = ob.tip_garnitura;
+        this->Fel_principal::operator=(ob);
+        leguma_principala = ob.leguma_principala;
+        tip_garnitura = ob.tip_garnitura;
     }
     return *this;
 }
@@ -907,8 +1008,8 @@ Vin_varsat::~Vin_varsat()
 
 void Vin_varsat::set_tip_vin_varsat(string culoare, double nr)
 {
-  this->culoare = culoare;
-  cantitate = nr;
+    this->culoare = culoare;
+    cantitate = nr;
 
 }
 
@@ -927,8 +1028,8 @@ Vin_varsat Vin_varsat::operator=(const Vin_varsat &ob)
     if(this!=&ob)
     {
 
-       culoare = ob.culoare;
-       cantitate = ob.cantitate;
+        culoare = ob.culoare;
+        cantitate = ob.cantitate;
     }
     return *this;
 }
@@ -974,8 +1075,8 @@ Vin_la_sticla::~Vin_la_sticla()
 
 void Vin_la_sticla::set_tip_vin_la_sticla(string denumire, int an)
 {
-  this->denumire = denumire;
-  this->an = an;
+    this->denumire = denumire;
+    this->an = an;
 
 }
 
@@ -994,8 +1095,8 @@ Vin_la_sticla Vin_la_sticla::operator=(const Vin_la_sticla &vin)
     if(this!=&vin)
     {
 
-       denumire = vin.denumire;
-       an = vin.an;
+        denumire = vin.denumire;
+        an = vin.an;
     }
     return *this;
 }
@@ -1022,6 +1123,179 @@ istream& operator>> (istream &in, Vin_la_sticla &vin)
     vin.set_pret(pr);
     return  in;
 }
+
+
+Bere_la_sticla::Bere_la_sticla(const Bere_la_sticla &ob)
+{
+    pret = ob.pret;
+
+    denumire = ob.denumire;
+    alcool = ob.alcool;
+}
+
+Bere_la_sticla::~Bere_la_sticla()
+{
+    denumire = "";
+    alcool = false;
+
+}
+
+void Bere_la_sticla::set_tip_bere_la_sticla(string denumire, bool alcool)
+{
+    this->denumire = denumire;
+    this->alcool = alcool;
+
+}
+
+double Bere_la_sticla::get_pret()
+{
+    return pret;
+}
+
+string Bere_la_sticla::get_tip_bere_la_sticla()
+{
+    return denumire;
+}
+
+Bere_la_sticla Bere_la_sticla::operator=(const Bere_la_sticla &bere)
+{
+    if(this!=&bere)
+    {
+
+        denumire = bere.denumire;
+        alcool = bere.alcool;
+    }
+    return *this;
+}
+
+ostream& operator<< (ostream &out, Bere_la_sticla &bere)
+{
+    out<<"pt berea la sticla "<<bere.denumire;
+    if(bere.alcool == true)
+        out<<" cu alcool";
+    else
+        cout<<" fara alcool";
+    out<<" pretul este ";
+    out<<bere.pret;
+    out<<"\n";
+    return out;
+}
+
+istream& operator>> (istream &in, Bere_la_sticla &bere)
+{
+    cout<<"dati ce marca de bere la sticla doriti:\n ";
+    in>>bere.denumire;
+
+    string s;
+    cout<<"doriti cu alcool?:\n";
+    in>>s;
+    if(s=="da")
+        bere.alcool = true;
+    else
+        bere.alcool = false;
+    cout<<"dati pretul: ";
+    double pr;
+    in>>pr;
+    bere.set_pret(pr);
+    return  in;
+}
+
+
+Apa::Apa(const Apa &ob)
+{
+    pret = ob.pret;
+
+    denumire = ob.denumire;
+}
+
+Apa::~Apa()
+{
+    denumire = "";
+}
+
+void Apa::set_tip_apa(string denumire)
+{
+    this->denumire = denumire;
+}
+
+double Apa::get_pret()
+{
+    return pret;
+}
+
+string Apa::get_tip_apa()
+{
+    return denumire;
+}
+
+Apa Apa::operator=(const Apa &ob)
+{
+    if(this!=&ob)
+    {
+
+        denumire = ob.denumire;
+
+    }
+    return *this;
+}
+
+ostream& operator<< (ostream &out, Apa &apa)
+{
+    out<<"pt sticla de apa"<<apa.denumire;
+    out<<" pretul este ";
+    out<<apa.pret;
+    out<<"\n";
+    return out;
+}
+
+istream& operator>> (istream &in, Apa &apa)
+{
+    cout<<"dati ce marca de apa la sticla doriti:\n ";
+    in>>apa.denumire;
+    cout<<"dati pretul: ";
+    double pr;
+    in>>pr;
+    apa.set_pret(pr);
+    return  in;
+}
+
+Bauturi::Bauturi(const Bauturi &ob)
+{
+    pret_mediu = ob.pret;
+}
+
+Bauturi::~Bauturi()
+{
+    pret_mediu = 0;
+}
+
+Bauturi Bauturi::operator=(const Bauturi &ob)
+{
+    if(this!=&ob)
+    {
+        this->Vin_la_sticla::operator=(ob);
+        this->Vin_varsat::operator=(ob);
+        this->Bere_la_sticla::operator=(ob);
+
+        pret_mediu = ob.pret_mediu;
+
+    }
+    return *this;
+}
+ostream& operator<< (ostream &out, Bauturi &b)
+{
+    out<<"pretul mediu al bauturilor este "<<b.pret_mediu;
+    out<<"\n";
+    return out;
+}
+
+istream& operator>> (istream &in, Bauturi &b)
+{
+    cout<<"dati pretul mediu al bauturilor:\n ";
+    in>>b.pret_mediu;
+    return  in;
+}
+
 
 
 int main()
