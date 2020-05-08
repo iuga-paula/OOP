@@ -27,7 +27,7 @@ public:
     friend istream& operator>> (istream &in, Examen &examen);
     void verifica_nota_scris();
     static void schimba_contor();
-    float get_media();
+    virtual float get_media();
 
 
 };
@@ -52,7 +52,7 @@ public:
     void verifica_nota_oral();
     Partial operator=(const Partial&);
     friend istream& operator>> (istream &in, Partial &partial);
-    float get_media(){return nota_oral;}
+    virtual float get_media()override{return nota_oral;}
 
 
 };
