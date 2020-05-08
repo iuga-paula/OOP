@@ -1,5 +1,7 @@
 #include <iostream>
 #include <bits/stdc++.h>
+#include <type_traits>
+
 
 using namespace std;
 class Examen
@@ -25,6 +27,7 @@ public:
     friend istream& operator>> (istream &in, Examen &examen);
     void verifica_nota_scris();
     static void schimba_contor();
+    float get_media();
 
 
 };
@@ -49,6 +52,7 @@ public:
     void verifica_nota_oral();
     Partial operator=(const Partial&);
     friend istream& operator>> (istream &in, Partial &partial);
+    float get_media(){return nota_oral;}
 
 
 };
@@ -121,6 +125,8 @@ private:
     static int contor_maticol;
     int nr_examen_curent;
     vector<T> structura_date;
+    //static vector<string> studenti_care_nu_au_trecut_examene;
+    static unordered_map<int, vector<string>> umap;
 
 public:
     Catalog_Individual();
@@ -132,9 +138,44 @@ public:
     int get_nr_matricol();
     int get_nr_examene();
     Catalog_Individual operator+=(const T &examen);
+    //void set_lista_cu_examene_picate(string nume_student);
+    void set_umapul_cu_studentii_picati(string);
+    void afiseaza_umapul_cu_sudentii_picati();
+
 
 
 };
+
+//
+//template <>
+//class Catalog_Individual<Quizz>;
+//
+//template<>
+//istream&operator>>(istream &in, Catalog_Individual<Quizz>&ob);
+//
+//template <>
+//class Catalog_Individual <Quizz>
+//{
+//private:
+//    int nr_matricol;
+//    static int contor_maticol;
+//    int nr_examen_curent;
+//    vector<Quizz> structura_date;
+//
+//public:
+//    Catalog_Individual();
+//    Catalog_Individual(const Catalog_Individual&);
+//    ~Catalog_Individual();
+//    Catalog_Individual operator=(const Catalog_Individual&);
+//    friend istream&operator>> <>(istream &in, Catalog_Individual&ob);
+//    void afisare();
+//    int get_nr_matricol();
+//    int get_nr_examene();
+//    Catalog_Individual operator+=(const Quizz &examen);
+//
+//
+//};
+
 
 class Elev
 {
@@ -166,6 +207,10 @@ public:
     void adauga_partial(Partial);
     void adauga_examen_final(Examen_final);
     void adauga_quizz(Quizz);
+    void set_partiale_picate();
+    void afiseaza_partialele_picate();
+    Elev* memorare_afisare_n_obiecte();
+
 
 
 
@@ -280,6 +325,7 @@ istream&operator>> (istream &in, Elev &ob)
     }
     cout<<"dati grupa\n";
     in>>ob.grupa;
+    cout<<"dati nr examene\n";
     in>>ob.nr_examene;
 
     return in;
@@ -307,6 +353,37 @@ ostream& operator<< (ostream &out, Elev &ob)
     return out;
 
 }
+
+
+void Elev::set_partiale_picate()
+{
+    partiale.set_umapul_cu_studentii_picati(get_nume());
+    //partiale.set_lista_cu_examene_picate(get_nume());
+}
+
+void Elev::afiseaza_partialele_picate()
+{
+    cout<<"id-ul partialului + studentii picati la partiale\n";
+    partiale.afiseaza_umapul_cu_sudentii_picati();
+}
+
+Elev* Elev::memorare_afisare_n_obiecte()
+{
+    int n;
+    cout<<"dati numarul de elevi:\n";
+    cin>>n;
+    Elev a[n];
+    for (int i=0; i<n; i++)
+        cin>>a[i];
+
+    cout<<"\n";
+    for (int i=0; i<n; i++)
+        cout<<a[i];
+
+    return a;
+
+}
+
 
 int Examen::contor_id_examen = 0;
 
@@ -419,6 +496,11 @@ istream& operator>> (istream &in, Examen &examen)
 
     return in;
 
+}
+
+float Examen::get_media()
+{
+    return nota_scris;
 }
 
 
@@ -748,41 +830,129 @@ istream&operator>> (istream &in, Catalog_Individual<T>&ob)
 
     return in;
 }
+//template<class T>
+//vector<string> Catalog_Individual<T>::studenti_care_nu_au_trecut_examene = {""};
 
+template<class T>
+unordered_map<int, vector<string>> Catalog_Individual<T>::umap = {{ 0, {""} }};
+
+template<class T>
+void Catalog_Individual<T>::set_umapul_cu_studentii_picati(string nume)
+{
+    for (unsigned i=0; i<structura_date.size(); i++)
+    {
+        if (umap.find(structura_date[i].get_id_examen()) == umap.end())
+        {
+            ///cheia nu a fost introdusa in umap pana acum;
+            umap.insert({ structura_date[i].get_id_examen(), {""} });
+        }
+       cout<<structura_date[i].get_media()<<" "<<structura_date[i].get_nota_scris()<<"\n";
+        if(structura_date[i].get_media() <5)
+        {
+            umap[structura_date[i].get_id_examen()].push_back(nume);
+        }
+
+    }
+
+
+}
+
+template<class T>
+void Catalog_Individual<T>::afiseaza_umapul_cu_sudentii_picati()
+{
+    for(const auto& p : umap)
+    {
+        if(p.first != 0)
+        {
+            cout << p.first << ":";
+            for(const auto& i : p.second)
+            {
+                cout << i;
+            }
+            cout<<"\n";
+        }
+    }
+}
+
+//template<class T>
+//void Catalog_Individual<T>::set_lista_cu_examene_picate(string nume)
+//{
+//    for (unsigned i=0; i<structura_date.size(); i++)
+//    {
+//       // cout<<structura_date[i].get_id_examen()<<" ";
+//        if(structura_date[i].get_nota_scris() <5)
+//            studenti_care_nu_au_trecut_examene.push_back(nume);
+//    }
+//
+//    for (unsigned i=0; i<studenti_care_nu_au_trecut_examene.size(); i++)
+//    {
+//        cout<<studenti_care_nu_au_trecut_examene[i]<<" ";
+//
+//    }
+//
+//}
+
+
+
+
+
+
+
+
+
+//template<>
+//Catalog_Individual<Quizz> Catalog_Individual<Quizz>::operator+=(const Quizz &ob)
+//{
+//
+//
+//
+//    nr_examen_curent++;
+//    structura_date.push_back(ob);
+//    return *this;
+//
+//}
+//
+//template <>
+//istream&operator>> (istream &in, Catalog_Individual<Quizz>&ob)
+//{
+//    cout<<"dati nr maricol:\n";
+//    in>>ob.nr_matricol;
+//    in>>ob.student;
+//    for(int i = 0; i <ob.nr_examen_curent; i++)
+//    {
+//        T x;
+//        cout<<"dati examenul\n";
+//        in>>x;
+//    }
+//
+//    return in;
+//}
 
 int main()
 {
-//    Examen ob0;
-//    cin>>ob0;
-//    cout<<ob0.get_nota_scris();
-//    Partial ob;
-//    cin>>ob;
-//    cout<<ob.get_nota_scris();
-//
-//Examen_final ob1;
-//cin>>ob1;
-////cout<<ob1.get_puncte_bonus();
-//    Examen_final examen;
-//    cin>>examen;
-//    Catalog_Individual<Examen_final>elev1;
-//
-//    elev1.adauga_nume_grupa_student("Iosif", 133,30);
-////cout<<elev1.get_nr_matricol();
-//   // elev1.afisare();
-////Quizz q("analiza", 6.40, 7, 3.00, 8.00);
-//    elev1+=examen;
-//elev1.afisare();
+//    Elev e;
+//    e.memorare_afisare_n_obiecte();
 
     Elev student1("Iosif", 133);
+    Elev student2("Popa", 133);
     Examen  examen("matem", 8.76);
     Partial partial1("info", 5.70, 9.00);
     Partial partial2("algebra", 10, 7.50);
+    Partial partial3("logica", 4.30, 6.00);
+    Partial partial4("info", 4.30, 10);
+    //cout<<examen.get_id_examen()<<"\n";
     student1.adauga_examen(examen);
     student1.adauga_partial(partial1);
     student1.adauga_partial(partial2);
+    student1.adauga_partial(partial3);
     student1.set_nr_examene();
-    cout<<student1;
-
+    student2.adauga_partial(partial4);
+    student2.set_nr_examene();
+    //cout<<student2;
+    //cout<<partial4.get_id_examen();
+    student1.set_partiale_picate();
+    student2.set_partiale_picate();
+    student1.afiseaza_partialele_picate();
 
     return 0;
 }
