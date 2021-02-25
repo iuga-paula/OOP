@@ -1,7 +1,7 @@
 # Programare-orientata-pe-obiecte
 
 ## 1. _Stiva de caractere_
-_Principii de baza oop: incapsulare, constructori de copiere, parametrizati, fara parametrii, destructori, supraincarcare operatori, polimorfism_ \
+_Principii de baza oop: incapsulare, obiecte, clase, constructori de copiere, parametrizati, fara parametrii, destructori, supraincarcare operatori, functii care intorc obiecte, polimorfism_ \
 Proiect care raspunde urmatoarelor cerinte:\
 se considera _clasa Nod_ :
 ```
