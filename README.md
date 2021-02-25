@@ -28,7 +28,7 @@ _Principii oop : functii inline, mostenire, clase abstracte, functii virtuale pu
 Proiect care raspunde urmatoarelor cerinte:\
 La restaurant se afla mai multe mese, fiecare masa are o capaciatate maxima de persoane. Clientii sosesc in grupuri si se aseaza la
 o masa suficient de incapatoare pentru ei. Un chelner ii intreaba pe rand daca vor un anumit fel de mancare/bautura/desert (intrebari cu raspuns scurt, de exemplu : \
-'''
+```
 Doriti ciorba? 
 Da
 De care? 
@@ -41,6 +41,6 @@ Fel principal doriti?
 Nu
 Desert doriti? 
 Nu
-''
+```
 ). Dupa ce mananca elibereaza masa si pot cere nota de plata individual sau pe masa.
 
