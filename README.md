@@ -58,7 +58,7 @@ Studentii unei facultati sustin mai multe examene in sesiune. Fiecare examen are
 - Examen final - puncte in plus pentru proiect
 - Quizz - pentru studentii care vor sa isi mareasca nota finala - contine un numar de itemi tip grila
 
-Cerinte:\
+Cerinte:
 - Sa se retina elevii care nu au trecut examenului intr-o structura de tip unordered_map <id_examen, vector<elev>>
 - Sa se construiasca clasa template CatalogIndividual care contine informatii despre tipurile de examene date de un student, numar matricol (unic per student) si nr_examene
 - Pentru adaugarea unei noi pagini in Catalog se supraincarca operatorul +=
