@@ -24,4 +24,23 @@ se considera _clasa Stiva_de_caractere_ care are:
 
 ## _Restaurant - gestiunea comenzilor si a clientilor_
 ### [Link proiect](https://github.com/iuga-paula/Programare-orientata-pe-obiecte/tree/master/Tema2)
-_Principii oop : functii inline, mostenire_ \
+_Principii oop : functii inline, mostenire, clase abstracte, functii virtuale pure, override, mostenire virtuala, functii virtuale, static, mostenire diamant_ \
+Proiect care raspunde urmatoarelor cerinte:\
+La restaurant se afla mai multe mese, fiecare masa are o capaciatate maxima de persoane. Clientii sosesc in grupuri si se aseaza la
+o masa suficient de incapatoare pentru ei. Un chelner ii intreaba pe rand daca vor un anumit fel de mancare/bautura/desert (intrebari cu raspuns scurt, de exemplu : \
+'''
+Doriti ciorba? 
+Da
+De care? 
+De legume
+Cu sau fara smantana? 
+Cu
+Cu sau fara Ardei?
+Fara
+Fel principal doriti? 
+Nu
+Desert doriti? 
+Nu
+''
+). Dupa ce mananca elibereaza masa si pot cere nota de plata individual sau pe masa.
+
